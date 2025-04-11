@@ -17,10 +17,16 @@ var identity = function (object) {
 function Memoize(callback, address) {
     var cache = {}, key;
     address || (address = identity);
-    return function () {
+    //return function () {
+    //    key = address.apply(this, arguments);
+    //    return has(cache, key) ? cache[key] : (cache[key] = callback.apply(this, arguments));
+    //};
+    function memoized() {
         key = address.apply(this, arguments);
         return has(cache, key) ? cache[key] : (cache[key] = callback.apply(this, arguments));
-    };
+    }
+    memoized.cache = cache; // Expose the cache for inspection
+    return memoized;
 };
 
 function Compose() {
